@@ -10,3 +10,7 @@ A small collection of declarative Jenkins Pipeline examples written in Groovy.
 1. Create a Pipeline job in Jenkins.
 2. Connect it to this repository.
 3. Choose the Jenkinsfile to run.
+
+## License
+
+MIT. See [LICENSE](LICENSE).
