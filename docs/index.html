@@ -1,0 +1,371 @@
+<!doctype html>
+<html lang="en" data-lang="en" dir="ltr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Jenkins Pipeline Examples · Declarative pipelines you can read in a minute</title>
+<meta name="description" content="Two small declarative Jenkins pipelines in Groovy: three stages that pass values between each other through env variables, plus a version that polls SCM every two minutes. Run one in the browser simulator, then in your own Jenkins. MIT.">
+<meta name="theme-color" content="#0a2550">
+<meta name="color-scheme" content="dark">
+<meta property="og:title" content="Jenkins Pipeline Examples · نمونه‌های پایپ‌لاین جنکینز">
+<meta property="og:description" content="Declarative Jenkins pipelines, explained on a blueprint, with a live stage-view simulator.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://mrzroot.github.io/jenkins/">
+<link rel="canonical" href="https://mrzroot.github.io/jenkins/">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<script>(function(){var d=document.documentElement,l='en';try{l=new URLSearchParams(location.search).get('lang')||localStorage.getItem('mrz-lang')||'en'}catch(e){}if(l==='fa'){d.lang='fa';d.dir='rtl';d.setAttribute('data-lang','fa')}})()</script>
+<style>
+@font-face{font-family:Vazirmatn;src:url(fonts/vazirmatn-arabic.woff2) format('woff2');font-weight:400 800;font-display:swap;unicode-range:U+0600-06FF,U+0750-077F,U+200C-200E,U+FB50-FDFF,U+FE70-FEFC}
+:root{--bp:#0a2550;--bp2:#0d2e63;--bp3:#123a78;--grid:rgba(160,200,255,.09);--grid2:rgba(160,200,255,.18);--line:rgba(190,220,255,.35);--fg:#eaf3ff;--mut:#a9c2e6;--dim:#7895bf;
+--cy:#7fe0ff;--ok:#5be3a0;--warn:#ffd166;--red:#ff7a7a;--paper:#f4f8ff;
+--sans:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,Arial,Vazirmatn,sans-serif;--fa:Vazirmatn,"Segoe UI",Tahoma,sans-serif;--mono:ui-monospace,"SF Mono",Menlo,Consolas,"Liberation Mono",monospace}
+*{box-sizing:border-box}html{scroll-behavior:smooth;background:var(--bp)}
+body{margin:0;color:var(--fg);font:16px/1.65 var(--sans);-webkit-font-smoothing:antialiased;overflow-x:hidden;
+background-color:var(--bp);background-image:linear-gradient(var(--grid2) 1px,transparent 1px),linear-gradient(90deg,var(--grid2) 1px,transparent 1px),linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:100px 100px,100px 100px,20px 20px,20px 20px;background-position:-1px -1px}
+html[data-lang=fa] body{font-family:var(--fa);line-height:1.9}
+html[data-lang=en] [lang=fa],html[data-lang=fa] [lang=en]{display:none!important}
+a{color:var(--cy)}
+code,pre{font-family:var(--mono)}
+p code,li code,td code{overflow-wrap:anywhere}
+.wrap{max-width:1180px;margin:0 auto;padding:0 24px}
+/* title block nav */
+.top{position:sticky;top:0;z-index:20;background:rgba(10,37,80,.92);backdrop-filter:blur(8px);border-bottom:2px solid var(--line)}
+.top .wrap{display:flex;align-items:center;gap:18px;height:60px}
+.brand{display:flex;align-items:center;gap:10px;color:var(--fg);text-decoration:none;font:700 14px var(--mono);letter-spacing:.06em;text-transform:uppercase}
+.brand img{width:30px;height:30px}
+.brand small{color:var(--dim);font-weight:400;text-transform:none;letter-spacing:0}
+.top nav{margin-inline-start:auto;display:flex;align-items:center;gap:20px;font:600 13px var(--mono);text-transform:uppercase;letter-spacing:.06em}
+html[data-lang=fa] .top nav{font-family:var(--fa);text-transform:none;letter-spacing:0;font-size:14px}
+.top nav a{color:var(--mut);text-decoration:none}.top nav a:hover{color:var(--fg)}
+.lang{display:flex;border:1px solid var(--line)}
+.lang button{background:none;border:0;color:var(--mut);font:700 12px var(--mono);padding:5px 10px;cursor:pointer}
+.lang button[aria-pressed=true]{background:var(--cy);color:var(--bp)}
+.gh{border:1px solid var(--line);padding:5px 12px}
+/* hero */
+.hero{padding:70px 0 60px}
+.hero .wrap{display:grid;grid-template-columns:1fr 1fr;gap:50px;align-items:center}
+.hero .wrap>*{min-width:0}
+.dwg{display:inline-flex;font:600 11px var(--mono);letter-spacing:.12em;text-transform:uppercase;border:1px solid var(--line)}
+.dwg span{padding:5px 10px;border-inline-end:1px solid var(--line)}.dwg span:last-child{border:0;color:var(--cy)}
+h1{font:800 clamp(38px,5vw,64px)/1.04 var(--sans);letter-spacing:-.02em;margin:22px 0 18px}
+html[data-lang=fa] h1{letter-spacing:0;line-height:1.35;font-size:clamp(32px,4.2vw,52px)}
+h1 .u{color:var(--cy);border-bottom:3px dashed var(--cy)}
+.lead{font-size:18px;color:var(--mut);max-width:540px;margin:0 0 28px}
+.cta{display:flex;flex-wrap:wrap;gap:12px}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:12px 20px;font:700 14px var(--mono);text-transform:uppercase;letter-spacing:.06em;border:2px solid var(--fg);color:var(--fg);text-decoration:none;background:transparent;cursor:pointer}
+html[data-lang=fa] .btn{font-family:var(--fa);text-transform:none;letter-spacing:0;font-size:15px}
+.btn:hover{background:rgba(255,255,255,.08)}
+.btn.p{background:var(--fg);color:var(--bp)}
+.btn.p:hover{background:var(--cy);border-color:var(--cy)}
+/* drawing */
+.draw{position:relative;border:2px solid var(--line);padding:26px;background:rgba(10,37,80,.6)}
+.draw:before,.draw:after{content:"";position:absolute;width:14px;height:14px;border:2px solid var(--cy)}
+.draw:before{top:-8px;left:-8px;border-right:0;border-bottom:0}.draw:after{bottom:-8px;right:-8px;border-left:0;border-top:0}
+.draw svg{direction:ltr;width:100%;height:auto;display:block}
+.draw .lbl{font:11px var(--mono);fill:var(--mut)}
+.draw .t{font:700 13px var(--mono);fill:var(--fg)}
+.draw .v{font:700 22px var(--mono);fill:var(--cy)}
+.flow{stroke-dasharray:6 6;animation:dash 1.2s linear infinite}
+@keyframes dash{to{stroke-dashoffset:-24}}
+.tb{display:grid;grid-template-columns:repeat(3,1fr);border:1px solid var(--line);border-top:0;font:11px var(--mono);color:var(--mut);margin:0 -26px -26px;direction:ltr}
+.tb div{padding:7px 10px;border-inline-end:1px solid var(--line)}.tb div:last-child{border:0}.tb b{display:block;color:var(--fg);font-size:12px}
+/* sections */
+section{padding:90px 0}
+.sh{display:flex;align-items:baseline;gap:14px;margin-bottom:8px}
+.sh .no{font:700 13px var(--mono);color:var(--bp);background:var(--cy);padding:2px 8px}
+.sh .ttl{font:600 12px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--cy)}
+html[data-lang=fa] .sh .ttl{font-family:var(--fa);letter-spacing:0;font-size:14px}
+h2{font:800 clamp(28px,3.6vw,44px)/1.1 var(--sans);letter-spacing:-.015em;margin:8px 0 14px}
+html[data-lang=fa] h2{letter-spacing:0;line-height:1.45}
+.sub{color:var(--mut);font-size:17px;max-width:700px;margin:0 0 40px}
+/* simulator (Jenkins-like, light) */
+.jk{background:var(--paper);color:#1d2733;border:2px solid var(--fg);box-shadow:12px 12px 0 rgba(127,224,255,.18);direction:ltr;text-align:left}
+html[dir=rtl] .jk{box-shadow:-12px 12px 0 rgba(127,224,255,.18)}
+.jk .hd{display:flex;align-items:center;gap:12px;padding:10px 16px;background:#1d2733;color:#fff;font:600 14px var(--sans);flex-wrap:wrap}
+.jk .hd .bc{color:#9fb1c6;font-weight:400;font-size:13px}
+.jk .hd .bc b{color:#fff;font-weight:600}
+.jk .hd .sp{margin-inline-start:auto;display:flex;gap:8px;align-items:center}
+.jk .seg{display:flex;border:1px solid #4a5a6e;border-radius:4px;overflow:hidden}
+.jk .seg button{background:none;border:0;color:#cfdbe8;font:600 12px var(--mono);padding:5px 10px;cursor:pointer}
+.jk .seg button[aria-pressed=true]{background:#3c8dde;color:#fff}
+.jk .run{background:#3c8dde;color:#fff;border:0;border-radius:4px;font:700 13px var(--sans);padding:7px 14px;cursor:pointer}
+.jk .run:disabled{opacity:.5;cursor:default}
+.jk .body{display:grid;grid-template-columns:210px 1fr}
+.jk .body>*{min-width:0}
+.jk .side{border-inline-end:1px solid #d5dde6;padding:14px;font-size:13px;background:#eef3f9}
+.jk .side h4{margin:0 0 8px;font:700 12px var(--sans);color:#5b6b7d;text-transform:uppercase;letter-spacing:.05em}
+.jk .side label{display:block;margin:8px 0 3px;font:600 12px var(--mono);color:#3b4a5b}
+.jk .side input{width:100%;font:600 15px var(--mono);padding:6px 8px;border:1px solid #b8c4d2;border-radius:4px;background:#fff;color:#1d2733}
+.jk .hist{list-style:none;margin:6px 0 0;padding:0;font:12px var(--mono)}
+.jk .hist li{display:flex;align-items:center;gap:6px;padding:4px 0;border-bottom:1px solid #dbe3ec}
+.jk .hist i{width:10px;height:10px;border-radius:50%;background:#3fb950;flex:none}
+.jk .hist li.r i{background:#3c8dde;animation:pulse 1s infinite}
+@keyframes pulse{50%{opacity:.3}}
+.jk .hist small{margin-inline-start:auto;color:#7a8898}
+.jk .main{padding:16px}
+.sv{overflow-x:auto}
+.sv table{border-collapse:collapse;font-size:13px;min-width:460px;width:100%}
+.sv th{background:#fff;border:1px solid #d5dde6;padding:8px 10px;font-weight:600;color:#3b4a5b;text-align:center}
+.sv th:first-child,.sv td:first-child{width:110px;text-align:left;color:#5b6b7d;font:12px var(--mono);background:#f7f9fc}
+.sv td{border:1px solid #d5dde6;height:52px;text-align:center;font:600 13px var(--mono);color:#1d2733;transition:background .3s;position:relative}
+.sv td.ok{background:#e3f6e9}
+.sv td.run{background:repeating-linear-gradient(45deg,#d9ebff 0 10px,#c8e1ff 10px 20px);background-size:200% 100%;animation:stripes 1s linear infinite}
+@keyframes stripes{to{background-position:-28px 0}}
+.sv td.idle{background:#fff;color:#a0adbb}
+.sv .avg td{height:34px;font-weight:400;color:#7a8898;background:#fbfcfe}
+.con{margin-top:14px;background:#11161d;color:#d8e2ec;font:12px/1.6 var(--mono);height:250px;overflow:auto;padding:12px 14px;border-radius:4px}
+.con p{margin:0;white-space:pre}
+.con .pl{color:#8b98a8}.con .e{color:#fff;font-weight:700}.con .s{color:#5be3a0;font-weight:700}.con .i{color:#7fb7ff}
+.poll{display:none;margin-top:12px;font:13px var(--mono);background:#fff7e0;border:1px solid #f1d58a;color:#6b5200;padding:8px 12px;border-radius:4px}
+.poll.on{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.poll b{color:#1d2733}
+/* anatomy */
+.anat{display:grid;grid-template-columns:1.15fr .85fr;gap:36px;align-items:start}
+.anat>*{min-width:0}
+.code{border:2px solid var(--line);background:rgba(6,24,54,.75);position:relative}
+.code .tabs{display:flex;border-bottom:2px solid var(--line)}
+.code .tabs button{background:none;border:0;border-inline-end:2px solid var(--line);color:var(--mut);font:600 13px var(--mono);padding:9px 14px;cursor:pointer}
+.code .tabs button[aria-selected=true]{background:var(--cy);color:var(--bp)}
+.code .tabs .copy{margin-inline-start:auto;border:0;border-inline-start:2px solid var(--line)}
+.code pre{margin:0;padding:16px 0;font-size:13px;line-height:1.75;overflow-x:auto;counter-reset:ln;direction:ltr;text-align:left}
+.code pre span.l{display:block;padding:0 18px 0 0;counter-increment:ln;transition:background .2s}
+.code pre span.l:before{content:counter(ln);display:inline-block;width:38px;padding-right:12px;text-align:right;color:var(--dim);border-right:1px solid var(--line);margin-right:14px}
+.code pre span.l.hl{background:rgba(127,224,255,.14)}
+.code .k{color:#ffd166}.code .s{color:#9ef0c6}.code .c{color:#ff9fd1}.code .n{color:#7fe0ff}
+.notes{counter-reset:nt;display:grid;gap:12px}
+.note{border:1px solid var(--line);padding:14px 16px 14px 52px;position:relative;cursor:default;transition:background .2s,border-color .2s;background:rgba(10,37,80,.5)}
+html[dir=rtl] .note{padding:14px 52px 14px 16px}
+.note:before{counter-increment:nt;content:counter(nt);position:absolute;inset-inline-start:14px;top:14px;width:26px;height:26px;border-radius:50%;border:2px solid var(--cy);display:grid;place-items:center;font:700 12px var(--mono);color:var(--cy)}
+.note:hover,.note.on{background:rgba(127,224,255,.08);border-color:var(--cy)}
+.note h3{margin:0 0 4px;font:700 15px var(--mono);color:var(--fg)}
+html[data-lang=fa] .note h3{font-family:var(--fa)}
+.note p{margin:0;color:var(--mut);font-size:14.5px}
+.note code{color:var(--cy)}
+/* compare */
+.cmp{width:100%;border-collapse:collapse;border:2px solid var(--line);font-size:15px;background:rgba(10,37,80,.6)}
+.cmp th,.cmp td{border:1px solid var(--line);padding:12px 16px;text-align:start;vertical-align:top}
+.cmp th{font:700 12px var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--cy);background:rgba(127,224,255,.06)}
+.cmp td code{color:var(--warn);font-size:13px}
+.cmpw{overflow-x:auto}
+/* steps */
+.steps{display:grid;grid-template-columns:repeat(4,1fr);gap:0;border:2px solid var(--line)}
+.steps>*{min-width:0}
+.st{padding:22px;border-inline-end:2px solid var(--line);position:relative}
+.st:last-child{border:0}
+.st b{font:800 40px/1 var(--mono);color:transparent;-webkit-text-stroke:1.5px var(--cy);display:block;margin-bottom:10px}
+.st h3{margin:0 0 6px;font-size:16px}
+.st p{margin:0;color:var(--mut);font-size:14px}
+.st code{color:var(--warn);font-size:12.5px}
+.term{margin-top:24px;border:2px solid var(--line);background:#061836;display:flex;align-items:center;gap:10px;padding:12px 12px 12px 16px;direction:ltr}
+.term code{flex:1;min-width:0;overflow-x:auto;white-space:nowrap;font-size:13.5px}
+.term .ps{color:var(--cy)}
+.copy{background:none;border:1px solid var(--line);color:var(--mut);font:600 12px var(--mono);padding:5px 10px;cursor:pointer;flex:none}
+.copy.ok{color:var(--ok);border-color:var(--ok)}
+.hint{color:var(--dim);font-size:14px;margin-top:10px}
+/* faq */
+.faq{max-width:880px}
+details{border:1px solid var(--line);margin-bottom:-1px;background:rgba(10,37,80,.55)}
+summary{cursor:pointer;list-style:none;padding:16px 18px;font-weight:700;font-size:16px;display:flex;justify-content:space-between;gap:16px}
+summary::-webkit-details-marker{display:none}
+summary:after{content:"[+]";font:700 13px var(--mono);color:var(--cy)}
+details[open] summary:after{content:"[−]"}
+details p{margin:0;padding:0 18px 18px;color:var(--mut)}
+details code{color:var(--warn)}
+footer{border-top:2px solid var(--line);padding:24px 0;font:13px var(--mono);color:var(--dim)}
+footer .wrap{display:flex;flex-wrap:wrap;gap:14px;justify-content:space-between}
+footer a{color:var(--mut)}
+@media (max-width:980px){.hero .wrap,.anat{grid-template-columns:minmax(0,1fr)}.steps{grid-template-columns:repeat(2,minmax(0,1fr))}.st:nth-child(2){border-inline-end:0}.st:nth-child(-n+2){border-bottom:2px solid var(--line)}}
+@media (max-width:700px){.jk .body{grid-template-columns:minmax(0,1fr)}.jk .side{border-inline-end:0;border-bottom:1px solid #d5dde6;display:grid;grid-template-columns:1fr 1fr;gap:0 12px}.jk .side h4,.jk .side .hw{grid-column:1/-1}}
+@media (max-width:640px){.top nav a.h,.gh,.brand small{display:none}.hero{padding:44px 0}section{padding:64px 0}.steps{grid-template-columns:minmax(0,1fr)}.st{border-inline-end:0!important;border-bottom:2px solid var(--line)}.st:last-child{border-bottom:0}.con{font-size:11px;height:220px}.tb{font-size:10px}.draw{padding:16px}.tb{margin:0 -16px -16px}}
+@media (prefers-reduced-motion:reduce){.flow,.sv td.run{animation:none}}
+</style>
+</head>
+<body>
+<header class="top"><div class="wrap">
+  <a class="brand" href="#"><img src="favicon.svg" alt="">Jenkins <small>pipeline examples</small></a>
+  <nav>
+    <a class="h" href="#sim"><span lang="en">Simulator</span><span lang="fa">شبیه‌ساز</span></a>
+    <a class="h" href="#anatomy"><span lang="en">Anatomy</span><span lang="fa">کالبدشکافی</span></a>
+    <a href="#start"><span lang="en">Run it</span><span lang="fa">اجرا</span></a>
+    <a class="h" href="#faq"><span lang="en">FAQ</span><span lang="fa">پرسش‌ها</span></a>
+    <a class="gh" href="https://github.com/mrzroot/jenkins">GitHub</a>
+    <div class="lang" role="group" aria-label="Language"><button type="button" data-set-lang="en">EN</button><button type="button" data-set-lang="fa">فا</button></div>
+  </nav>
+</div></header>
+
+<main>
+<section class="hero"><div class="wrap">
+  <div>
+    <div class="dwg"><span>DWG-01</span><span>Groovy</span><span>Declarative</span><span>MIT</span></div>
+    <h1><span lang="en">Jenkins pipelines, drawn <span class="u">to scale</span>.</span><span lang="fa">پایپ‌لاین‌های جنکینز، <span class="u">با مقیاس دقیق</span>.</span></h1>
+    <p class="lead"><span lang="en">Two tiny declarative pipelines you can read in a minute: three stages that pass a value from one to the next through <code>env</code>, and a twin that polls Git every two minutes. Run one in the simulator below, then in your own Jenkins.</span><span lang="fa">دو پایپ‌لاین declarative کوچک که در یک دقیقه خوانده می‌شوند: سه مرحله که مقداری را از طریق <code>env</code> به مرحلهٔ بعد می‌دهند، و همزادی که هر دو دقیقه گیت را بررسی می‌کند. اول در شبیه‌ساز پایین و بعد در جنکینز خودتان اجرایش کنید.</span></p>
+    <div class="cta"><a class="btn p" href="#sim">▶ <span lang="en">Build now</span><span lang="fa">ساخت</span></a><a class="btn" href="https://github.com/mrzroot/jenkins">GitHub</a></div>
+  </div>
+  <div class="draw" aria-hidden="true">
+    <svg viewBox="0 0 520 250">
+      <defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#7fe0ff"/></marker></defs>
+      <g fill="none" stroke="#bfe0ff" stroke-width="1.5">
+        <rect x="20" y="70" width="130" height="80"/><rect x="195" y="70" width="130" height="80"/><rect x="370" y="70" width="130" height="80"/>
+      </g>
+      <path class="flow" d="M150 110H193" stroke="#7fe0ff" stroke-width="2" marker-end="url(#ar)"/>
+      <path class="flow" d="M325 110H368" stroke="#7fe0ff" stroke-width="2" marker-end="url(#ar)"/>
+      <text x="85" y="95" text-anchor="middle" class="t">Addition</text><text x="85" y="132" text-anchor="middle" class="v" id="dv1">5+3=8</text>
+      <text x="260" y="95" text-anchor="middle" class="t">Division</text><text x="260" y="132" text-anchor="middle" class="v" id="dv2">8/2=4</text>
+      <text x="435" y="95" text-anchor="middle" class="t">Final Result</text><text x="435" y="132" text-anchor="middle" class="v" id="dv3">4</text>
+      <g stroke="#7895bf" stroke-width="1"><path d="M20 170V185M150 170V185M20 180H150"/><path d="M195 170V185M325 170V185M195 180H325"/><path d="M370 170V185M500 170V185M370 180H500"/></g>
+      <text x="85" y="200" text-anchor="middle" class="lbl">env.SUM = "8"</text><text x="260" y="200" text-anchor="middle" class="lbl">env.R = "4"</text><text x="435" y="200" text-anchor="middle" class="lbl">echo ${env.R}</text>
+      <path d="M20 40H500" stroke="#7895bf" stroke-dasharray="2 4"/><text x="20" y="30" class="lbl">pipeline { agent any · stages { … } }</text>
+      <circle cx="500" cy="40" r="4" fill="#5be3a0"/><text x="490" y="30" text-anchor="end" class="lbl">SUCCESS</text>
+    </svg>
+    <div class="tb"><div>TITLE<b>Jenkinsfile</b></div><div>STAGES<b>3</b></div><div>TRIGGER<b>manual · pollSCM</b></div></div>
+  </div>
+</div></section>
+
+<section id="sim" style="padding-top:30px"><div class="wrap">
+  <div class="sh"><span class="no">01</span><span class="ttl"><span lang="en">Simulator</span><span lang="fa">شبیه‌ساز</span></span></div>
+  <h2><span lang="en">Press Build Now. Watch the stage view.</span><span lang="fa">«Build Now» را بزنید. نمای مراحل را تماشا کنید.</span></h2>
+  <p class="sub"><span lang="en">A faithful replay of what Jenkins prints for these files, with Groovy's own number rules. Change the inputs: try 7 and 0 to see Groovy's <code>/</code> return a decimal.</span><span lang="fa">بازپخش دقیق خروجی جنکینز برای همین فایل‌ها با قواعد عددی خود Groovy. ورودی‌ها را عوض کنید: ۷ و ۰ را امتحان کنید تا ببینید <code>/</code> در Groovy عدد اعشاری برمی‌گرداند.</span></p>
+  <div class="jk">
+    <div class="hd"><span>Jenkins</span><span class="bc">› <b>jenkins-examples</b> › <span id="bcf">Jenkinsfile</span></span>
+      <span class="sp"><span class="seg" role="group" aria-label="File"><button type="button" data-f="0" aria-pressed="true">Jenkinsfile</button><button type="button" data-f="1" aria-pressed="false">jenkinsfile123</button></span><button class="run" type="button" id="run">▶ Build Now</button></span></div>
+    <div class="body">
+      <div class="side">
+        <h4>Parameters (demo)</h4>
+        <div><label for="n1">number1</label><input id="n1" type="number" value="5"></div>
+        <div><label for="n2">number2</label><input id="n2" type="number" value="3"></div>
+        <div class="hw"><h4 style="margin-top:14px">Build History</h4><ul class="hist" id="hist"></ul></div>
+      </div>
+      <div class="main">
+        <div class="sv"><table><thead><tr><th></th><th>Addition</th><th>Division</th><th>Final Result</th></tr></thead>
+          <tbody id="sv"><tr class="avg"><td>Average stage times:</td><td>212ms</td><td>148ms</td><td>96ms</td></tr></tbody></table></div>
+        <div class="poll" id="poll">⏱ <span>triggers { pollSCM '<b>*/2 * * * *</b>' }</span><span>· next poll in <b id="cd">--:--</b></span><span>· “Started by an SCM change”</span></div>
+        <div class="con" id="con" aria-live="polite"></div>
+      </div>
+    </div>
+  </div>
+</div></section>
+
+<section id="anatomy"><div class="wrap">
+  <div class="sh"><span class="no">02</span><span class="ttl"><span lang="en">Anatomy</span><span lang="fa">کالبدشکافی</span></span></div>
+  <h2><span lang="en">Every line, annotated.</span><span lang="fa">تک‌تک خطوط، با توضیح.</span></h2>
+  <p class="sub"><span lang="en">Hover a note to highlight its lines.</span><span lang="fa">روی هر یادداشت بروید تا خطوطش برجسته شود.</span></p>
+  <div class="anat">
+    <div class="code">
+      <div class="tabs" role="tablist"><button type="button" role="tab" aria-selected="true" data-tab="0">Jenkinsfile</button><button type="button" role="tab" aria-selected="false" data-tab="1">jenkinsfile123</button><button class="copy" type="button" id="cpy">Copy</button></div>
+      <pre id="src"></pre>
+    </div>
+    <div class="notes">
+      <div class="note" data-hl="1-2"><h3>pipeline · agent any</h3><p><span lang="en">Declarative syntax. <code>agent any</code> runs on any available executor, including the built-in node on a fresh install.</span><span lang="fa">سینتکس declarative. <code>agent any</code> روی هر اجراکنندهٔ آزادی اجرا می‌شود، حتی نود داخلی در نصب تازه.</span></p></div>
+      <div class="note" data-hl="tr"><h3>triggers { pollSCM }</h3><p><span lang="en">Only in <code>jenkinsfile123</code>. Jenkins checks Git on a cron schedule, every 2 minutes here, and builds when something changed.</span><span lang="fa">فقط در <code>jenkinsfile123</code>. جنکینز طبق زمان‌بندی کرون (اینجا هر ۲ دقیقه) گیت را بررسی می‌کند و اگر تغییری بود می‌سازد.</span></p></div>
+      <div class="note" data-hl="add"><h3>stage('Addition') · script { }</h3><p><span lang="en"><code>def</code> variables and arithmetic need a <code>script</code> block inside declarative steps.</span><span lang="fa">متغیرهای <code>def</code> و محاسبات داخل گام‌های declarative به بلوک <code>script</code> نیاز دارند.</span></p></div>
+      <div class="note" data-hl="env"><h3>env.SUM = sum.toString()</h3><p><span lang="en">Local <code>def</code> variables die with their stage. <code>env</code> survives across stages, but only stores strings, so convert back with <code>toInteger()</code>.</span><span lang="fa">متغیرهای محلی <code>def</code> با پایان مرحله از بین می‌روند. <code>env</code> بین مراحل می‌ماند اما فقط رشته نگه می‌دارد؛ پس با <code>toInteger()</code> برگردانید.</span></p></div>
+      <div class="note" data-hl="div"><h3>sum / 2</h3><p><span lang="en">Groovy's <code>/</code> on integers returns a BigDecimal: <code>8 / 2</code> is <code>4</code>, <code>7 / 2</code> is <code>3.5</code>. Use <code>intdiv()</code> for integer division.</span><span lang="fa"><code>/</code> در Groovy روی اعداد صحیح BigDecimal برمی‌گرداند: <code>8 / 2</code> می‌شود <code>4</code> و <code>7 / 2</code> می‌شود <code>3.5</code>. برای تقسیم صحیح از <code>intdiv()</code> استفاده کنید.</span></p></div>
+    </div>
+  </div>
+</div></section>
+
+<section style="padding-top:0"><div class="wrap">
+  <div class="sh"><span class="no">03</span><span class="ttl"><span lang="en">Bill of materials</span><span lang="fa">فهرست قطعات</span></span></div>
+  <h2><span lang="en">Two files, one difference.</span><span lang="fa">دو فایل، یک تفاوت.</span></h2>
+  <div class="cmpw"><table class="cmp"><thead><tr><th></th><th>Jenkinsfile</th><th>jenkinsfile123</th></tr></thead><tbody>
+    <tr><td><span lang="en">Starts on</span><span lang="fa">شروع با</span></td><td><span lang="en">Manual “Build Now” (or a webhook you add)</span><span lang="fa">«Build Now» دستی (یا وب‌هوکی که اضافه کنید)</span></td><td><code>pollSCM '*/2 * * * *'</code> <span lang="en">+ manual</span><span lang="fa">+ دستی</span></td></tr>
+    <tr><td><span lang="en">Values passed via</span><span lang="fa">انتقال مقدار با</span></td><td><code>env.SUM</code> → <code>env.R</code></td><td><code>env.TOTAL_SUM</code> → <code>env.RESULT</code></td></tr>
+    <tr><td><span lang="en">Stages</span><span lang="fa">مراحل</span></td><td colspan="2">Addition → Division → Final Result</td></tr>
+    <tr><td><span lang="en">Output</span><span lang="fa">خروجی</span></td><td colspan="2"><code>The sum is: 8</code> · <code>The division result is: 4</code> · <code>The final result is: 4</code></td></tr>
+  </tbody></table></div>
+</div></section>
+
+<section id="start"><div class="wrap">
+  <div class="sh"><span class="no">04</span><span class="ttl"><span lang="en">Run it for real</span><span lang="fa">اجرای واقعی</span></span></div>
+  <h2><span lang="en">From zero to a green build.</span><span lang="fa">از صفر تا یک بیلد سبز.</span></h2>
+  <p class="sub"><span lang="en">No Jenkins yet? Start one locally with Docker, then point a Pipeline job at this repo.</span><span lang="fa">جنکینز ندارید؟ با داکر یکی محلی راه بیندازید و بعد یک Pipeline job را به این مخزن وصل کنید.</span></p>
+  <div class="steps">
+    <div class="st"><b>1</b><h3>New Item → Pipeline</h3><p><span lang="en">Give the job a name and choose <i>Pipeline</i>.</span><span lang="fa">یک نام بدهید و <i>Pipeline</i> را انتخاب کنید.</span></p></div>
+    <div class="st"><b>2</b><h3>Pipeline script from SCM</h3><p><span lang="en">SCM: Git. Repository URL: <code>https://github.com/mrzroot/jenkins.git</code></span><span lang="fa">SCM را Git بگذارید. آدرس مخزن: <code>https://github.com/mrzroot/jenkins.git</code></span></p></div>
+    <div class="st"><b>3</b><h3>Script Path</h3><p><code>Jenkinsfile</code> <span lang="en">or</span><span lang="fa">یا</span> <code>jenkinsfile123</code><span lang="en"> for the polling version. Branch: <code>*/main</code>.</span><span lang="fa"> برای نسخهٔ پولینگ. شاخه: <code>*/main</code>.</span></p></div>
+    <div class="st"><b>4</b><h3>Build Now</h3><p><span lang="en">Open <i>Console Output</i>: you should see 8, 4 and 4, then <code>Finished: SUCCESS</code>.</span><span lang="fa"><i>Console Output</i> را باز کنید: باید ۸، ۴ و ۴ و سپس <code>Finished: SUCCESS</code> را ببینید.</span></p></div>
+  </div>
+  <div class="term"><code id="dk"><span class="ps">$ </span>docker run -d -p 8080:8080 -v jenkins_home:/var/jenkins_home --name jenkins jenkins/jenkins:lts</code><button class="copy" type="button" data-copy="dk">Copy</button></div>
+  <p class="hint"><span lang="en">Then open http://localhost:8080 and unlock it with <code>docker exec jenkins cat /var/jenkins_home/secrets/initialAdminPassword</code>. The suggested plugins include Pipeline and Git.</span><span lang="fa">سپس http://localhost:8080 را باز کنید و با <code>docker exec jenkins cat /var/jenkins_home/secrets/initialAdminPassword</code> قفلش را باز کنید. افزونه‌های پیشنهادی Pipeline و Git را دارند.</span></p>
+</div></section>
+
+<section id="faq"><div class="wrap faq">
+  <div class="sh"><span class="no">05</span><span class="ttl">FAQ</span></div>
+  <h2><span lang="en">Field notes.</span><span lang="fa">یادداشت‌های میدانی.</span></h2>
+  <details open><summary><span lang="en">Why does it store numbers in env as strings?</span><span lang="fa">چرا عددها را به‌صورت رشته در env ذخیره می‌کند؟</span></summary><p><span lang="en">Jenkins environment variables are always strings. The example shows the round trip: <code>toString()</code> when saving, <code>toInteger()</code> when reading in the next stage.</span><span lang="fa">متغیرهای محیطی جنکینز همیشه رشته‌اند. این مثال رفت‌وبرگشت را نشان می‌دهد: <code>toString()</code> هنگام ذخیره و <code>toInteger()</code> هنگام خواندن در مرحلهٔ بعد.</span></p></details>
+  <details><summary><span lang="en">Should I poll every 2 minutes in production?</span><span lang="fa">در پروداکشن هر ۲ دقیقه پول کنم؟</span></summary><p><span lang="en">Prefer a webhook from GitHub. If you must poll, use <code>H/2 * * * *</code>: the <code>H</code> spreads jobs across the interval so they don't all hit Git at once.</span><span lang="fa">وب‌هوک گیت‌هاب بهتر است. اگر مجبور به پولینگ هستید از <code>H/2 * * * *</code> استفاده کنید؛ <code>H</code> جاب‌ها را در بازه پخش می‌کند تا همه هم‌زمان به گیت فشار نیاورند.</span></p></details>
+  <details><summary><span lang="en">Do I need the script { } blocks?</span><span lang="fa">بلوک‌های script { } لازم‌اند؟</span></summary><p><span lang="en">For <code>def</code>, arithmetic and assigning <code>env.X</code> inside declarative <code>steps</code>, yes. For bigger logic, move it into a shared library or a function outside the <code>pipeline</code> block.</span><span lang="fa">برای <code>def</code>، محاسبات و مقداردهی <code>env.X</code> داخل <code>steps</code>ِ declarative، بله. منطق بزرگ‌تر را به یک shared library یا تابعی بیرون از بلوک <code>pipeline</code> ببرید.</span></p></details>
+  <details><summary><span lang="en">Can I use these files in my own projects?</span><span lang="fa">می‌توانم این فایل‌ها را در پروژه‌های خودم استفاده کنم؟</span></summary><p><span lang="en">Yes. The repository is MIT-licensed. Copy, adapt and ship.</span><span lang="fa">بله. مخزن مجوز MIT دارد؛ کپی کنید، تغییر دهید و استفاده کنید.</span></p></details>
+  <details><summary><span lang="en">Is the simulator running real Jenkins?</span><span lang="fa">شبیه‌ساز جنکینز واقعی اجرا می‌کند؟</span></summary><p><span lang="en">No. It replays Jenkins's console format in JavaScript, applying Groovy's division rules to your inputs. Nothing leaves your browser.</span><span lang="fa">نه. قالب کنسول جنکینز را با جاوااسکریپت بازپخش می‌کند و قواعد تقسیم Groovy را روی ورودی‌های شما اعمال می‌کند. چیزی از مرورگرتان خارج نمی‌شود.</span></p></details>
+</div></section>
+</main>
+<footer><div class="wrap">
+  <span>jenkins · MIT · <a href="https://mrzroot.github.io/">M-R-Z (@mrzroot)</a> · <span lang="en">not affiliated with the Jenkins project</span><span lang="fa">بدون وابستگی به پروژهٔ Jenkins</span></span>
+  <span><a href="https://mrzroot.github.io/projects/"><span lang="en">More projects</span><span lang="fa">پروژه‌های دیگر</span></a></span>
+</div></footer>
+
+<script>
+(function(){
+  var R=document.documentElement,$=function(s){return document.querySelector(s)},$$=function(s){return Array.prototype.slice.call(document.querySelectorAll(s))};
+  var TITLES={en:'Jenkins Pipeline Examples · Declarative pipelines you can read in a minute',fa:'نمونه‌های پایپ‌لاین جنکینز · پایپ‌لاین‌هایی که در یک دقیقه خوانده می‌شوند'};
+  function setLang(l,save){R.setAttribute('data-lang',l);R.lang=l;R.dir=l==='fa'?'rtl':'ltr';document.title=TITLES[l];
+    $$('[data-set-lang]').forEach(function(b){b.setAttribute('aria-pressed',String(b.getAttribute('data-set-lang')===l))});
+    if(save)try{localStorage.setItem('mrz-lang',l)}catch(e){}}
+  setLang(R.getAttribute('data-lang')||'en');
+  $$('[data-set-lang]').forEach(function(b){b.addEventListener('click',function(){setLang(b.getAttribute('data-set-lang'),true)})});
+  function cp(t,b){if(navigator.clipboard)navigator.clipboard.writeText(t).then(function(){b.classList.add('ok');setTimeout(function(){b.classList.remove('ok')},1300)})}
+  $$('[data-copy]').forEach(function(b){b.onclick=function(){cp(document.getElementById(b.getAttribute('data-copy')).textContent.replace(/^\$ /,''),b)}});
+
+  /* the two real files */
+  var F=[
+"pipeline {\n    agent any\n   \n    stages {\n        stage('Addition') {\n            steps {\n                script {\n                    def number1 = 5\n                    def number2 = 3\n                    def sum = number1 + number2\n                    echo \"The sum is: ${sum}\"\n                    env.SUM = sum.toString()\n                }\n            }\n        }\n        \n        stage('Division') {\n            steps {\n                script {\n                    def sum = env.SUM.toInteger()\n                    def result = sum / 2\n                    echo \"The division result is: ${result}\"\n                    env.R = result.toString()\n                }\n            }\n        }\n        \n        stage('Final Result') {\n            steps {\n                script {\n                    echo \"The final result is: ${env.R}\"\n                }\n            }\n        }\n    }\n}",
+"pipeline {\n  agent any\n  triggers {\n    pollSCM '*/2 * * * *'\n  }\n\n  stages {\n    stage('Addition') {\n      steps {\n        script {\n          def number1 = 5\n          def number2 = 3\n          def sum = number1 + number2\n          echo \"The sum is: ${sum}\"\n          env.TOTAL_SUM = sum.toString()\n        }\n      }\n    }\n\n    stage('Division') {\n      steps {\n        script {\n          def sum = env.TOTAL_SUM.toInteger()\n          def result = sum / 2\n          echo \"The division result is: ${result}\"\n          env.RESULT = result.toString()\n        }\n      }\n    }\n\n    stage('Final Result') {\n      steps {\n        script {\n          echo \"The final result is: ${env.RESULT}\"\n        }\n      }\n    }\n  }\n}"];
+  var HL=[{'1-2':[1,2],tr:[],add:[5,6,7,8,9,10,11],env:[12,20,23,31],div:[21]},{'1-2':[1,2],tr:[3,4,5],add:[8,9,10,11,12,13,14],env:[15,23,26,34],div:[24]}];
+  var cur=0;
+  function esc(s){return s.replace(/[&<>]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;'}[c]})}
+  function hlx(line){return esc(line).replace(/(&quot;|".*?")/g,'<span class="s">$1</span>').replace(/'([^']*)'/g,'<span class="s">\'$1\'</span>')
+    .replace(/\b(pipeline|agent|any|stages|stage|steps|script|def|echo|triggers|pollSCM)\b/g,'<span class="k">$1</span>').replace(/\b(env)\.(\w+)/g,'<span class="n">$1.$2</span>')}
+  function showSrc(i){cur=i;$('#src').innerHTML=F[i].split('\n').map(function(l){return '<span class="l">'+(hlx(l)||' ')+'</span>'}).join('');
+    $$('.code .tabs [data-tab]').forEach(function(b){b.setAttribute('aria-selected',String(+b.getAttribute('data-tab')===i))})}
+  showSrc(0);
+  $$('.code .tabs [data-tab]').forEach(function(b){b.onclick=function(){showSrc(+b.getAttribute('data-tab'))}});
+  $('#cpy').onclick=function(){cp(F[cur],this)};
+  $$('.note').forEach(function(n){function on(v){var ls=$$('#src .l');(HL[cur][n.getAttribute('data-hl')]||[]).forEach(function(k){if(ls[k-1])ls[k-1].classList.toggle('hl',v)});n.classList.toggle('on',v)}
+    n.addEventListener('mouseenter',function(){on(true)});n.addEventListener('mouseleave',function(){on(false)});n.addEventListener('click',function(){on(!n.classList.contains('on'))})});
+
+  /* Groovy number semantics: int + int = int, int / int = BigDecimal (scale up to 10, HALF_UP, stripped) */
+  function gdiv(a,b){if(b===0)return null;var q=a/b;if(Number.isInteger(q))return String(q);
+    var s=(Math.round(q*1e10)/1e10).toFixed(10).replace(/0+$/,'').replace(/\.$/,'');return s}
+  var file=0,build=0,busy=false,con=$('#con'),sv=$('#sv');
+  $$('[data-f]').forEach(function(b){b.onclick=function(){if(busy)return;file=+b.getAttribute('data-f');$$('[data-f]').forEach(function(x){x.setAttribute('aria-pressed',String(x===b))});$('#bcf').textContent=b.textContent;$('#poll').classList.toggle('on',file===1)}});
+  function L(cls,t){var p=document.createElement('p');p.className=cls||'';p.textContent=t;con.appendChild(p);con.scrollTop=con.scrollHeight}
+  function W(ms){return new Promise(function(r){setTimeout(r,ms)})}
+  function hist(){var li=document.createElement('li');li.className='r';li.innerHTML='<i></i>#'+build+'<small>'+new Date().toTimeString().slice(0,5)+'</small>';var h=$('#hist');h.insertBefore(li,h.firstChild);while(h.children.length>5)h.removeChild(h.lastChild);return li}
+  async function run(trigger){if(busy)return;busy=true;$('#run').disabled=true;build++;var li=hist();
+    var a=parseInt($('#n1').value,10),b=parseInt($('#n2').value,10);if(isNaN(a))a=0;if(isNaN(b))b=0;
+    var sum=a+b,res=gdiv(sum,2),k1=file?'TOTAL_SUM':'SUM',k2=file?'RESULT':'R';
+    var tr=document.createElement('tr');tr.innerHTML='<td>#'+build+'</td><td class="idle">·</td><td class="idle">·</td><td class="idle">·</td>';sv.insertBefore(tr,sv.firstChild);while(sv.children.length>4)sv.removeChild(sv.children[3]);
+    var tds=tr.querySelectorAll('td');con.innerHTML='';
+    L('',trigger||'Started by user admin');L('i','Obtained '+(file?'jenkinsfile123':'Jenkinsfile')+' from git https://github.com/mrzroot/jenkins.git');
+    L('pl','[Pipeline] Start of Pipeline');L('pl','[Pipeline] node');L('','Running on Jenkins in /var/jenkins_home/workspace/jenkins-examples');L('pl','[Pipeline] {');
+    if(file){L('pl','[Pipeline] properties');}
+    var names=['Addition','Division','Final Result'],outs=['The sum is: '+sum,'The division result is: '+res,'The final result is: '+res],t=[0,0,0];
+    for(var i=0;i<3;i++){tds[i+1].className='run';tds[i+1].textContent='';await W(220);
+      L('pl','[Pipeline] stage');L('pl','[Pipeline] { ('+names[i]+')');L('pl','[Pipeline] script');L('pl','[Pipeline] {');await W(260);
+      L('pl','[Pipeline] echo');L('e',outs[i]);
+      $('#dv'+(i+1)).textContent=i===0?a+'+'+b+'='+sum:i===1?sum+'/2='+res:res;
+      await W(220);L('pl','[Pipeline] }');L('pl','[Pipeline] // script');L('pl','[Pipeline] }');L('pl','[Pipeline] // stage');
+      t[i]=[212,148,96][i]+Math.round(Math.random()*40-20);tds[i+1].className='ok';tds[i+1].textContent=t[i]+'ms'}
+    L('pl','[Pipeline] }');L('pl','[Pipeline] // node');L('pl','[Pipeline] End of Pipeline');L('s','Finished: SUCCESS');
+    li.className='';busy=false;$('#run').disabled=false}
+  $('#run').onclick=function(){run()};
+  ['n1','n2'].forEach(function(id){$('#'+id).addEventListener('keydown',function(e){if(e.key==='Enter')run()})});
+  /* pollSCM countdown: next even minute */
+  setInterval(function(){var d=new Date(),s=(d.getMinutes()%2)*60+d.getSeconds(),left=120-s;$('#cd').textContent='0'+Math.floor(left/60)+':'+('0'+left%60).slice(-2);
+    if(file===1&&left===120&&!busy)run('Started by an SCM change')},1000);
+  var io='IntersectionObserver' in window?new IntersectionObserver(function(es){if(es[0].isIntersecting){io.disconnect();run()}},{threshold:.3}):null;
+  io?io.observe($('.jk')):run();
+})();
+</script>
+</body>
+</html>
