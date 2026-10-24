@@ -1,0 +1,19 @@
+/* jenkins identity: "blueprint". Cyanotype royal blue + white chalk (dark) / drafting paper + blue ink (light). Barlow Condensed. Drafting table canvas with CAD crosshair and click-to-measure. */
+@font-face{font-family:'Barlow Condensed';src:url(fonts/barlow-condensed-700.woff2) format('woff2');font-weight:700;font-display:swap}
+html[data-theme=dark]:root{--bp:#0a3490;--bp2:#0c3ba3;--bp3:#1249be;--grid:rgba(255,255,255,.10);--grid2:rgba(255,255,255,.2);--line:rgba(255,255,255,.55);--fg:#ffffff;--mut:#cfe0ff;--dim:#a2bdf0;--cy:#ffe27a;--ok:#9dffcb;--warn:#ffe27a;--red:#ffb0b0;--glass:rgba(5,30,100,.7);--glass2:rgba(255,255,255,.08);--slab:#05215f}
+html[data-theme=light]:root{--bp:#f6f9ff;--bp2:#e8f0ff;--bp3:#d6e4ff;--grid:rgba(20,70,200,.09);--grid2:rgba(20,70,200,.2);--line:rgba(10,52,144,.5);--fg:#0a2a78;--mut:#2c4b9a;--dim:#506bb0;--cy:#0b4fd0;--ok:#0b7a4f;--warn:#9a5a00;--red:#b42318;--glass:rgba(255,255,255,.85);--glass2:rgba(11,79,208,.07);--slab:#ffffff}
+h1,h2,.brand,.dwg{font-family:'Barlow Condensed',Vazirmatn,sans-serif;font-weight:700;letter-spacing:.01em;text-transform:uppercase}
+h1{font-size:clamp(46px,6.4vw,100px)!important;line-height:.95!important}
+h2{font-size:clamp(34px,4.4vw,64px)!important;line-height:1!important}
+html[data-lang=fa] h1,html[data-lang=fa] h2,html[data-lang=fa] .brand,html[lang=fa] h1,html[lang=fa] h2{font-family:Vazirmatn,sans-serif;text-transform:none;letter-spacing:0;line-height:1.35!important}
+html[data-lang=fa] h1,html[lang=fa] h1{font-size:clamp(32px,4.4vw,62px)!important}
+.hero{position:relative;overflow:clip;isolation:isolate}
+.hero .wrap{position:relative;z-index:2}
+.cad{position:absolute;inset:0;width:100%;height:100%;z-index:1;pointer-events:auto;cursor:crosshair;touch-action:pan-y}
+.hero .wrap{pointer-events:none}.hero .wrap a,.hero .wrap button,.hero .wrap .draw{pointer-events:auto}
+h1 .u{text-decoration:underline wavy;text-decoration-thickness:2px;text-underline-offset:8px}
+.btn{border-radius:0!important;text-transform:uppercase;font-family:'Barlow Condensed',Vazirmatn,sans-serif;font-weight:700;letter-spacing:.06em}
+.btn.p{box-shadow:5px 5px 0 rgba(0,0,0,.35)}
+.btn:hover{transform:translate(-2px,-2px)}
+.dwg span{border-style:dashed!important}
+@media(max-width:520px){.brand .fa-name{display:none}}
