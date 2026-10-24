@@ -17,3 +17,6 @@ h1 .u{text-decoration:underline wavy;text-decoration-thickness:2px;text-underlin
 .btn:hover{transform:translate(-2px,-2px)}
 .dwg span{border-style:dashed!important}
 @media(max-width:520px){.brand .fa-name{display:none}}
+
+/* QA: keep the "A" (automatic) badge anchored to the theme button */
+html .mrz-tt{position:relative}
