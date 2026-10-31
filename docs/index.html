@@ -126,7 +126,7 @@ html[dir=rtl] .jk{box-shadow:-12px 12px 0 rgba(127,224,255,.18)}
 .anat{display:grid;grid-template-columns:1.15fr .85fr;gap:36px;align-items:start}
 .anat>*{min-width:0}
 .code{border:2px solid var(--line);background:rgba(6,24,54,.75);position:relative}
-.code .tabs{display:flex;border-bottom:2px solid var(--line)}
+.code .tabs{display:flex;border-bottom:2px solid var(--line)}.tabs .tl{display:flex}
 .code .tabs button{background:none;border:0;border-inline-end:2px solid var(--line);color:var(--mut);font:600 13px var(--mono);padding:9px 14px;cursor:pointer}
 .code .tabs button[aria-selected=true]{background:var(--cy);color:var(--bp)}
 .code .tabs .copy{margin-inline-start:auto;border:0;border-inline-start:2px solid var(--line)}
@@ -293,7 +293,7 @@ html[data-theme=light] .jk .seg button[aria-pressed=true]{color:#fff}
         <div class="hw"><h4 style="margin-top:14px">Build History</h4><ul class="hist" id="hist"></ul></div>
       </div>
       <div class="main">
-        <div class="sv"><table><thead><tr><th></th><th>Addition</th><th>Division</th><th>Final Result</th></tr></thead>
+        <div class="sv" tabindex="0"><table><thead><tr><th></th><th>Addition</th><th>Division</th><th>Final Result</th></tr></thead>
           <tbody id="sv"><tr class="avg"><td>Average stage times:</td><td>212ms</td><td>148ms</td><td>96ms</td></tr></tbody></table></div>
         <div class="poll" id="poll">⏱ <span>triggers { pollSCM '<b>*/2 * * * *</b>' }</span><span>· next poll in <b id="cd">--:--</b></span><span>· “Started by an SCM change”</span></div>
         <div class="con" id="con" aria-live="polite"></div>
@@ -308,8 +308,8 @@ html[data-theme=light] .jk .seg button[aria-pressed=true]{color:#fff}
   <p class="sub"><span lang="en">Hover a note to highlight its lines.</span><span lang="fa">روی هر یادداشت بروید تا خطوطش برجسته شود.</span></p>
   <div class="anat">
     <div class="code">
-      <div class="tabs" role="tablist"><button type="button" role="tab" aria-selected="true" data-tab="0">Jenkinsfile</button><button type="button" role="tab" aria-selected="false" data-tab="1">jenkinsfile123</button><button class="copy" type="button" id="cpy">Copy</button></div>
-      <pre id="src"></pre>
+      <div class="tabs"><div class="tl" role="tablist" aria-label="Source files"><button type="button" role="tab" aria-selected="true" data-tab="0">Jenkinsfile</button><button type="button" role="tab" aria-selected="false" data-tab="1">jenkinsfile123</button></div><button class="copy" type="button" id="cpy">Copy</button></div>
+      <pre id="src" tabindex="0"></pre>
     </div>
     <div class="notes">
       <div class="note" data-hl="1-2"><h3>pipeline · agent any</h3><p><span lang="en">Declarative syntax. <code>agent any</code> runs on any available executor, including the built-in node on a fresh install.</span><span lang="fa">سینتکس declarative. <code>agent any</code> روی هر اجراکنندهٔ آزادی اجرا می‌شود، حتی نود داخلی در نصب تازه.</span></p></div>
@@ -342,7 +342,7 @@ html[data-theme=light] .jk .seg button[aria-pressed=true]{color:#fff}
     <div class="st"><b>3</b><h3>Script Path</h3><p><code>Jenkinsfile</code> <span lang="en">or</span><span lang="fa">یا</span> <code>jenkinsfile123</code><span lang="en"> for the polling version. Branch: <code>*/main</code>.</span><span lang="fa"> برای نسخهٔ پولینگ. شاخه: <code>*/main</code>.</span></p></div>
     <div class="st"><b>4</b><h3>Build Now</h3><p><span lang="en">Open <i>Console Output</i>: you should see 8, 4 and 4, then <code>Finished: SUCCESS</code>.</span><span lang="fa"><i>Console Output</i> را باز کنید: باید ۸، ۴ و ۴ و سپس <code>Finished: SUCCESS</code> را ببینید.</span></p></div>
   </div>
-  <div class="term"><code id="dk"><span class="ps">$ </span>docker run -d -p 8080:8080 -v jenkins_home:/var/jenkins_home --name jenkins jenkins/jenkins:lts</code><button class="copy" type="button" data-copy="dk">Copy</button></div>
+  <div class="term"><code id="dk" tabindex="0"><span class="ps">$ </span>docker run -d -p 8080:8080 -v jenkins_home:/var/jenkins_home --name jenkins jenkins/jenkins:lts</code><button class="copy" type="button" data-copy="dk">Copy</button></div>
   <p class="hint"><span lang="en">Then open http://localhost:8080 and unlock it with <code>docker exec jenkins cat /var/jenkins_home/secrets/initialAdminPassword</code>. The suggested plugins include Pipeline and Git.</span><span lang="fa">سپس http://localhost:8080 را باز کنید و با <code>docker exec jenkins cat /var/jenkins_home/secrets/initialAdminPassword</code> قفلش را باز کنید. افزونه‌های پیشنهادی Pipeline و Git را دارند.</span></p>
 </div></section>
 
