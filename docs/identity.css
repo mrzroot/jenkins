@@ -1,5 +1,5 @@
 /* jenkins identity: "blueprint". Cyanotype royal blue + white chalk (dark) / drafting paper + blue ink (light). Barlow Condensed. Drafting table canvas with CAD crosshair and click-to-measure. */
-@font-face{font-family:'Barlow Condensed';src:url(fonts/barlow-condensed-700.woff2) format('woff2');font-weight:700;font-display:swap}
+
 html[data-theme=dark]:root{--bp:#0a3490;--bp2:#0c3ba3;--bp3:#1249be;--grid:rgba(255,255,255,.10);--grid2:rgba(255,255,255,.2);--line:rgba(255,255,255,.55);--fg:#ffffff;--mut:#cfe0ff;--dim:#a2bdf0;--cy:#ffe27a;--ok:#9dffcb;--warn:#ffe27a;--red:#ffb0b0;--glass:rgba(5,30,100,.7);--glass2:rgba(255,255,255,.08);--slab:#05215f}
 html[data-theme=light]:root{--bp:#f6f9ff;--bp2:#e8f0ff;--bp3:#d6e4ff;--grid:rgba(20,70,200,.09);--grid2:rgba(20,70,200,.2);--line:rgba(10,52,144,.5);--fg:#0a2a78;--mut:#2c4b9a;--dim:#506bb0;--cy:#0b4fd0;--ok:#0b7a4f;--warn:#9a5a00;--red:#b42318;--glass:rgba(255,255,255,.85);--glass2:rgba(11,79,208,.07);--slab:#ffffff}
 h1,h2,.brand,.dwg{font-family:'Barlow Condensed',Vazirmatn,sans-serif;font-weight:700;letter-spacing:.01em;text-transform:uppercase}
@@ -20,3 +20,4 @@ h1 .u{text-decoration:underline wavy;text-decoration-thickness:2px;text-underlin
 
 /* QA: keep the "A" (automatic) badge anchored to the theme button */
 html .mrz-tt{position:relative}
+

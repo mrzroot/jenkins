@@ -18,7 +18,7 @@
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <script>(function(){var d=document.documentElement,l='fa';try{l=new URLSearchParams(location.search).get('lang')||localStorage.getItem('mrz-lang')||'fa'}catch(e){}if(l!=='en')l='fa';d.lang=l;d.dir=l==='fa'?'rtl':'ltr';d.setAttribute('data-lang',l)})()</script>
 <style>
-@font-face{font-family:Vazirmatn;src:url(fonts/vazirmatn-arabic.woff2) format('woff2');font-weight:400 800;font-display:swap;unicode-range:U+0600-06FF,U+0750-077F,U+200C-200E,U+FB50-FDFF,U+FE70-FEFC}
+
 :root{--bp:#0a2550;--bp2:#0d2e63;--bp3:#123a78;--grid:rgba(160,200,255,.09);--grid2:rgba(160,200,255,.18);--line:rgba(190,220,255,.35);--fg:#eaf3ff;--mut:#a9c2e6;--dim:#7895bf;
 --cy:#7fe0ff;--ok:#5be3a0;--warn:#ffd166;--red:#ff7a7a;--paper:#f4f8ff;
 --sans:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,Arial,Vazirmatn,sans-serif;--fa:Vazirmatn,"Segoe UI",Tahoma,sans-serif;--mono:ui-monospace,"SF Mono",Menlo,Consolas,"Liberation Mono",monospace}
@@ -236,8 +236,8 @@ html[data-theme=light] .jk .seg{border-color:#b9c3d3}
 html[data-theme=light] .jk .seg button{color:#3a4363}
 html[data-theme=light] .jk .seg button[aria-pressed=true]{color:#fff}
 </style>
-<link rel="preload" href="fonts/barlow-condensed-700.woff2" as="font" type="font/woff2" crossorigin><link rel="stylesheet" href="identity.css"></head>
-<body>
+<link rel="stylesheet" href="identity.css"><link rel="stylesheet" href="project-rebuild.css"><link rel="preload" href="/assets/fonts/Vazirmatn-Variable.woff2" as="font" type="font/woff2" crossorigin="anonymous"></head>
+<body class="rebuild-dev dr-classroom">
 <header class="top"><div class="wrap">
   <a class="brand" href="#"><img src="favicon.svg" alt="">Jenkins <small>pipeline examples</small></a>
   <nav>
@@ -246,39 +246,39 @@ html[data-theme=light] .jk .seg button[aria-pressed=true]{color:#fff}
     <a href="#start"><span lang="en">Run it</span><span lang="fa">اجرا</span></a>
     <a class="h" href="#faq"><span lang="en">FAQ</span><span lang="fa">پرسش‌ها</span></a>
     <a class="gh" href="https://github.com/mrzroot/jenkins">GitHub</a>
-    <button type="button" class="mrz-tt" data-theme-toggle aria-label="Switch to dark mode" title="Switch to dark mode"><svg class="i-sun" viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2.5v2M12 19.5v2M4.6 4.6 6 6M18 18l1.4 1.4M2.5 12h2M19.5 12h2M4.6 19.4 6 18M18 6l1.4-1.4"/></g></svg><svg class="i-moon" viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round" d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5Z"/></svg></button><div class="lang" role="group" aria-label="Language"><button type="button" data-set-lang="en">EN</button><button type="button" data-set-lang="fa">فا</button></div>
+    <button type="button" class="mrz-tt" data-theme-toggle aria-label="Switch to dark mode" title="Switch to dark mode"><svg class="i-sun" viewbox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><circle cx="12" cy="12" r="4"></circle><path d="M12 2.5v2M12 19.5v2M4.6 4.6 6 6M18 18l1.4 1.4M2.5 12h2M19.5 12h2M4.6 19.4 6 18M18 6l1.4-1.4"></path></g></svg><svg class="i-moon" viewbox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round" d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5Z"></path></svg></button><div class="lang" role="group" aria-label="Language"><button type="button" data-set-lang="en">EN</button><button type="button" data-set-lang="fa">فا</button></div>
   </nav>
 </div></header>
 
 <main>
-<section class="hero"><div class="wrap">
+<section class="hero dr-external-hero"><div class="wrap">
   <div>
     <div class="dwg"><span>DWG-01</span><span>Groovy</span><span>Declarative</span><span>MIT</span></div>
-    <h1><span lang="en">Jenkins pipelines, drawn <span class="u">to scale</span>.</span><span lang="fa">پایپ‌لاین‌های جنکینز، <span class="u">با مقیاس دقیق</span>.</span></h1>
+    <p class="dr-mode"><span lang="en">PIPELINE / 08</span><span lang="fa">کلاس پایپ‌لاین</span></p><h1 class="dr-title"><span class="dr-line"><span lang="en">Three stages.</span><span lang="fa">سه مرحله.</span></span><em class="dr-em"><span lang="en">One visible result.</span><span lang="fa">یک نتیجهٔ قابل مشاهده.</span></em></h1>
     <p class="lead"><span lang="en">Two tiny declarative pipelines you can read in a minute: three stages that pass a value from one to the next through <code>env</code>, and a twin that polls Git every two minutes. Run one in the simulator below, then in your own Jenkins.</span><span lang="fa">دو پایپ‌لاین declarative کوچک که در یک دقیقه خوانده می‌شوند: سه مرحله که مقداری را از طریق <code>env</code> به مرحلهٔ بعد می‌دهند، و همزادی که هر دو دقیقه گیت را بررسی می‌کند. اول در شبیه‌ساز پایین و بعد در جنکینز خودتان اجرایش کنید.</span></p>
     <div class="cta"><a class="btn p" href="#sim">▶ <span lang="en">Build now</span><span lang="fa">ساخت</span></a><a class="btn" href="https://github.com/mrzroot/jenkins">GitHub</a></div>
   </div>
   <div class="draw" aria-hidden="true">
-    <svg viewBox="0 0 520 250">
-      <defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#7fe0ff"/></marker></defs>
+    <svg viewbox="0 0 520 250">
+      <defs><marker id="ar" viewbox="0 0 10 10" refx="9" refy="5" markerwidth="7" markerheight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#7fe0ff"></path></marker></defs>
       <g fill="none" stroke="#bfe0ff" stroke-width="1.5">
-        <rect x="20" y="70" width="130" height="80"/><rect x="195" y="70" width="130" height="80"/><rect x="370" y="70" width="130" height="80"/>
+        <rect x="20" y="70" width="130" height="80"></rect><rect x="195" y="70" width="130" height="80"></rect><rect x="370" y="70" width="130" height="80"></rect>
       </g>
-      <path class="flow" d="M150 110H193" stroke="#7fe0ff" stroke-width="2" marker-end="url(#ar)"/>
-      <path class="flow" d="M325 110H368" stroke="#7fe0ff" stroke-width="2" marker-end="url(#ar)"/>
+      <path class="flow" d="M150 110H193" stroke="#7fe0ff" stroke-width="2" marker-end="url(#ar)"></path>
+      <path class="flow" d="M325 110H368" stroke="#7fe0ff" stroke-width="2" marker-end="url(#ar)"></path>
       <text x="85" y="95" text-anchor="middle" class="t">Addition</text><text x="85" y="132" text-anchor="middle" class="v" id="dv1">5+3=8</text>
       <text x="260" y="95" text-anchor="middle" class="t">Division</text><text x="260" y="132" text-anchor="middle" class="v" id="dv2">8/2=4</text>
       <text x="435" y="95" text-anchor="middle" class="t">Final Result</text><text x="435" y="132" text-anchor="middle" class="v" id="dv3">4</text>
-      <g stroke="#7895bf" stroke-width="1"><path d="M20 170V185M150 170V185M20 180H150"/><path d="M195 170V185M325 170V185M195 180H325"/><path d="M370 170V185M500 170V185M370 180H500"/></g>
+      <g stroke="#7895bf" stroke-width="1"><path d="M20 170V185M150 170V185M20 180H150"></path><path d="M195 170V185M325 170V185M195 180H325"></path><path d="M370 170V185M500 170V185M370 180H500"></path></g>
       <text x="85" y="200" text-anchor="middle" class="lbl">env.SUM = "8"</text><text x="260" y="200" text-anchor="middle" class="lbl">env.R = "4"</text><text x="435" y="200" text-anchor="middle" class="lbl">echo ${env.R}</text>
-      <path d="M20 40H500" stroke="#7895bf" stroke-dasharray="2 4"/><text x="20" y="30" class="lbl">pipeline { agent any · stages { … } }</text>
-      <circle cx="500" cy="40" r="4" fill="#5be3a0"/><text x="490" y="30" text-anchor="end" class="lbl">SUCCESS</text>
+      <path d="M20 40H500" stroke="#7895bf" stroke-dasharray="2 4"></path><text x="20" y="30" class="lbl">pipeline { agent any · stages { … } }</text>
+      <circle cx="500" cy="40" r="4" fill="#5be3a0"></circle><text x="490" y="30" text-anchor="end" class="lbl">SUCCESS</text>
     </svg>
     <div class="tb"><div>TITLE<b>Jenkinsfile</b></div><div>STAGES<b>3</b></div><div>TRIGGER<b>manual · pollSCM</b></div></div>
   </div>
 </div></section>
 
-<section id="sim" style="padding-top:30px"><div class="wrap">
+<aside class="dr-guide" aria-label="Project orientation / معرفی پروژه"><div><a class="dr-back" href="/projects/"><span lang="en">All projects</span><span lang="fa">همهٔ پروژه‌ها</span></a><p><span lang="en">Change two inputs in the browser sandbox and follow the result across stages. No Jenkins server is needed for this demo.</span><span lang="fa">دو ورودی را در تمرین مرورگر تغییر بده و نتیجه را در مرحله‌ها دنبال کن. این تمرین به سرور جنکینز نیاز ندارد.</span></p></div><a class="dr-jump" href="#sim"><span lang="en">Open the walkthrough</span><span lang="fa">باز کردن تمرین</span><span aria-hidden="true">↓</span></a></aside><section id="sim" style="padding-top:30px" class="dr-active-section"><div class="wrap">
   <div class="sh"><span class="no">01</span><span class="ttl"><span lang="en">Simulator</span><span lang="fa">شبیه‌ساز</span></span></div>
   <h2><span lang="en">Press Build Now. Watch the stage view.</span><span lang="fa">«Build Now» را بزنید. نمای مراحل را تماشا کنید.</span></h2>
   <p class="sub"><span lang="en">A faithful replay of what Jenkins prints for these files, with Groovy's own number rules. Change the inputs: try 7 and 0 to see Groovy's <code>/</code> return a decimal.</span><span lang="fa">بازپخش دقیق خروجی جنکینز برای همین فایل‌ها با قواعد عددی خود Groovy. ورودی‌ها را عوض کنید: ۷ و ۰ را امتحان کنید تا ببینید <code>/</code> در Groovy عدد اعشاری برمی‌گرداند.</span></p>
@@ -332,7 +332,7 @@ html[data-theme=light] .jk .seg button[aria-pressed=true]{color:#fff}
   </tbody></table></div>
 </div></section>
 
-<section id="start"><div class="wrap">
+<section id="start" class="dr-setup"><div class="wrap">
   <div class="sh"><span class="no">04</span><span class="ttl"><span lang="en">Run it for real</span><span lang="fa">اجرای واقعی</span></span></div>
   <h2><span lang="en">From zero to a green build.</span><span lang="fa">از صفر تا یک بیلد سبز.</span></h2>
   <p class="sub"><span lang="en">No Jenkins yet? Start one locally with Docker, then point a Pipeline job at this repo.</span><span lang="fa">جنکینز ندارید؟ با داکر یکی محلی راه بیندازید و بعد یک Pipeline job را به این مخزن وصل کنید.</span></p>
