@@ -35,6 +35,19 @@ The division result is: 4
 The final result is: 4
 ```
 
+
+## Teach stage outputs without configuring a live job
+
+Use the browser sandbox to try values such as 3 and 5. In Jenkins, view Addition, Division and Final Result separately to see where each value was set or consumed.
+
+```text
+Jenkinsfile
+```
+
+Start with the base Jenkinsfile for a manual build. Use jenkinsfile123 only in a disposable job if you want to demonstrate polling; the browser sandbox does not contact Jenkins or poll SCM.
+
+See the [bilingual scenario on the project page](docs/index.html#first-check).
+
 ## How it works
 
 Values set on `env` inside a `script { }` block are visible in later stages, but only as strings, which is why the

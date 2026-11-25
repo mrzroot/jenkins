@@ -6,6 +6,9 @@ see the [commit history](https://github.com/mrzroot/jenkins/commits).
 
 ## [Unreleased]
 
+- Add a bilingual first-check walkthrough to the project page and document this workflow in the README.
+
+
 ### Changed
 - README rewritten: banner, plain-language introduction, quick start and contributing sections.
 - Added issue templates and this changelog.
