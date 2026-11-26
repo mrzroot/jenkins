@@ -236,7 +236,7 @@ html[data-theme=light] .jk .seg{border-color:#b9c3d3}
 html[data-theme=light] .jk .seg button{color:#3a4363}
 html[data-theme=light] .jk .seg button[aria-pressed=true]{color:#fff}
 </style>
-<link rel="stylesheet" href="identity.css"><link rel="stylesheet" href="project-rebuild.css"><link rel="preload" href="/assets/fonts/Vazirmatn-Variable.woff2" as="font" type="font/woff2" crossorigin="anonymous"><link rel="stylesheet" href="/assets/studio-mark.css"></head>
+<link rel="stylesheet" href="identity.css"><link rel="stylesheet" href="project-rebuild.css"><link rel="preload" href="/assets/fonts/Vazirmatn-Variable.woff2" as="font" type="font/woff2" crossorigin="anonymous"><link rel="stylesheet" href="/assets/studio-mark.css"><link rel="stylesheet" href="/assets/portfolio/embed.css"><script defer src="/assets/portfolio/exhibit.js"></script></head>
 <body class="rebuild-dev dr-classroom">
 <header class="top"><div class="wrap">
   <a class="brand" href="#"><img src="favicon.svg" alt="">Jenkins <small>pipeline examples</small></a>
@@ -277,11 +277,32 @@ html[data-theme=light] .jk .seg button[aria-pressed=true]{color:#fff}
     <div class="tb"><div>TITLE<b>Jenkinsfile</b></div><div>STAGES<b>3</b></div><div>TRIGGER<b>manual · pollSCM</b></div></div>
   </div>
 </div></section>
-<aside class="studio-project-entry" style="--entry-color:#ff997e">
-  <img src="/assets/thumbs/jenkins.webp" alt="" width="160" height="100" loading="lazy" decoding="async">
-  <div><strong>مرحلهٔ توقف پایپ‌لاین را پیدا کن</strong><small>مرحلهٔ خراب را بررسی کن</small></div>
-  <a href="/playground/?project=jenkins&amp;lang=fa">سناریو را امتحان کن ↗</a>
-</aside>
+<div class="atlas-embedded" data-motif="route" style="--exhibit-hue:7"><section class="exhibit-studio" id="portfolio-example" data-project="jenkins" data-motif="route" data-state="0" aria-labelledby="portfolio-example-title">
+    <div class="exhibit-studio-head"><div><p class="exhibit-kicker"><span class="pf-en" lang="en">Illustrative sample</span><span class="pf-fa" lang="fa">دادهٔ نمونه</span></p><h2 id="portfolio-example-title"><span class="pf-en" lang="en">Send the sample through a route</span><span class="pf-fa" lang="fa">نمونه را از یک مسیر عبور بده</span></h2></div>
+       <a href="/projects/guide/jenkins/"><span class="pf-en" lang="en">Interactive introduction</span><span class="pf-fa" lang="fa">معرفی تعاملی</span> <i class="exhibit-arrow" aria-hidden="true"></i></a></div>
+    <div class="exhibit-lab">
+      <div class="stage-picture" aria-hidden="true">
+        <div class="stage-sign"><i></i><i></i><i></i><strong dir="ltr">Jenkins Pipeline Examples</strong></div>
+
+        <div class="stage-track" dir="ltr"></div>
+        <div class="stage-evidence" dir="ltr"><span dir="auto">Build ✓</span><span dir="auto">Test failed</span><span dir="auto">Deploy pending</span></div>
+      </div>
+      <div class="stage-work">
+        <p><span class="pf-en" lang="en">A build succeeds but the test stage fails. The deployment depends on both stages.</span><span class="pf-fa" lang="fa">ساخت موفق است، اما مرحلهٔ آزمون خطا دارد و انتشار به هر دو وابسته است.</span></p>
+        <div class="stage-actions" role="group" aria-label="Example controls / کنترل‌های نمونه">
+          <button type="button" data-stage="1" aria-pressed="false"><span class="pf-en" lang="en">Inspect the failing stage</span><span class="pf-fa" lang="fa">مرحلهٔ خراب را بررسی کن</span><i class="exhibit-arrow" aria-hidden="true"></i></button><button type="button" data-stage="2" aria-pressed="false"><span class="pf-en" lang="en">Retry deployment directly</span><span class="pf-fa" lang="fa">مستقیم انتشار را تکرار کن</span><i class="exhibit-arrow" aria-hidden="true"></i></button>
+        </div>
+        <output class="stage-result" aria-live="polite"><span class="pf-en" lang="en">Try a response to see its effect.</span><span class="pf-fa" lang="fa">یک کار را انتخاب کن و اثرش را ببین.</span></output>
+        <div class="stage-foot">
+          <button type="button" data-stage="0" aria-pressed="true"><span class="pf-en" lang="en">Reset example</span><span class="pf-fa" lang="fa">بازنشانی نمونه</span></button>
+
+        </div>
+      </div>
+    </div>
+   </section>
+    <p class="exhibit-takeaway"><span class="pf-en" lang="en">Find the failing stage in the pipeline view and use its own logs to inspect the error.</span><span class="pf-fa" lang="fa">مرحلهٔ ناموفق را در نمای پایپ‌لاین پیدا کن و خطا را از گزارش همان مرحله بخوان.</span></p>
+    <script type="application/json" data-embed-project>{"entries":[{"id":"jenkins","group":"systems","motif":"route","color":"#ff997e","title":["See where the pipeline stopped","مرحلهٔ توقف پایپ‌لاین را پیدا کن"],"brief":["A build succeeds but the test stage fails. The deployment depends on both stages.","ساخت موفق است، اما مرحلهٔ آزمون خطا دارد و انتشار به هر دو وابسته است."],"actions":[["Inspect the failing stage","مرحلهٔ خراب را بررسی کن"],["Retry deployment directly","مستقیم انتشار را تکرار کن"]],"outcomes":[["The test logs provide the specific failure and the simulation leaves deployment pending.","لاگ آزمون خطای مشخص را نشان می‌دهد و انتشار در شبیه‌سازی در انتظار می‌ماند."],["Starting from deploy skips the evidence required to explain the failure.","شروع از انتشار از شواهد لازم برای توضیح خطا عبور می‌کند."]],"evidence":[["Build ✓","Test failed","Deploy pending"],["Build ✓","Inspect test log","Deploy pending"],["Build ✓","Test failed","Retry blocked"]],"name":"Jenkins Pipeline Examples","kicker":["CI/CD","CI/CD"],"intro":["Read small declarative Jenkins pipelines to see how stages and SCM polling fit together.","پایپ‌لاین‌های کوچک declarative جنکینز را ببینید تا رابطهٔ مراحل و بررسی تغییرات مخزن روشن شود."],"hint":["Read the checkout and build stages in one sample first. Use a test pipeline before adapting it for your team.","اول مراحل دریافت کد و ساخت را در یک نمونه بخوانید. قبل از استفاده برای تیم، در پایپ‌لاین آزمایشی امتحان کنید."],"site":"/jenkins/","source":"https://github.com/mrzroot/jenkins","layout":"switchboard","hue":7,"image":"/assets/thumbs/jenkins.webp"}],"labels":{"map":["Project Atlas","اطلس پروژه‌ها"],"mapIntro":["Four ways to explore the projects. Choose a project to see what it does and open its interactive introduction.","چهار مسیر برای گشتن میان پروژه‌ها. یکی را انتخاب کن تا ببینی چه کار می‌کند و معرفی تعاملی‌اش را باز کنی."],"agents":["AI tooling","ابزارهای هوش مصنوعی"],"language":["Language and data","زبان و داده"],"systems":["Systems","سامانه‌ها"],"showcase":["Design and demos","طراحی و دمو"],"projects":["All projects","همهٔ پروژه‌ها"],"open":["Interactive introduction","معرفی تعاملی"],"test":["Try the example","نمونه را امتحان کن"],"story":["The situation","مسئله"],"reference":["Inspect the project","بررسی پروژه"],"source":["View source on GitHub","کد منبع در گیت‌هاب"],"demo":["Open project website","باز کردن سایت پروژه"],"guide":["Suggested first step","قدم اول پیشنهادی"],"sample":["Illustrative sample","دادهٔ نمونه"],"result":["What happens","نتیجه"],"choose":["Try a response to see its effect.","یک کار را انتخاب کن و اثرش را ببین."],"still":["Initial state","حالت اولیه"],"reset":["Reset example","بازنشانی نمونه"],"more":["Explore another project","یک پروژهٔ دیگر ببین"]}}</script>
+  </div>
 
 <aside class="dr-guide" aria-label="Project orientation / معرفی پروژه"><div><a class="dr-back" href="/projects/"><span lang="en">All projects</span><span lang="fa">همهٔ پروژه‌ها</span></a><p><span lang="en">Change two inputs in the browser sandbox and follow the result across stages. No Jenkins server is needed for this demo.</span><span lang="fa">دو ورودی را در تمرین مرورگر تغییر بده و نتیجه را در مرحله‌ها دنبال کن. این تمرین به سرور جنکینز نیاز ندارد.</span></p></div><a class="dr-jump" href="#sim"><span lang="en">Open the walkthrough</span><span lang="fa">باز کردن تمرین</span><span aria-hidden="true">↓</span></a></aside><section id="sim" style="padding-top:30px" class="dr-active-section"><div class="wrap">
   <div class="sh"><span class="no">01</span><span class="ttl"><span lang="en">Simulator</span><span lang="fa">شبیه‌ساز</span></span></div>
